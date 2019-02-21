@@ -1,27 +1,28 @@
-import React, {Component} from 'react'
-import withRedux from 'next-redux-wrapper'
-import Link from 'next/link'
+import React from 'react'
+import { connect } from 'react-redux'
+import { startClock, serverRenderClock } from '../store'
+import Examples from '../components/examples'
 
-import makeStore from '../store'
-import { fetchUsers } from '../actions/users-actions'
+class Index extends React.Component {
+  static getInitialProps ({ reduxStore, req }) {
+    const isServer = !!req
+    reduxStore.dispatch(serverRenderClock(isServer))
 
-class Users extends Component {
-  
-  static async getInitialProps({store, pathname, query}) {
-    await store.dispatch(fetchUsers())
+    return {}
   }
 
-  render() {
-  	const { users, browser } = this.props
-  	return(
-      <div>
-      <div>Next.js</div>
-      <div><Link href='/accounts'><a>My Accounts</a></Link></div>
-      </div>
-  	)
+  componentDidMount () {
+    const { dispatch } = this.props
+    this.timer = startClock(dispatch)
+  }
+
+  componentWillUnmount () {
+    clearInterval(this.timer)
+  }
+
+  render () {
+    return <Examples />
   }
 }
 
-const mapStateToProps = state => ({users: state.users, browser: state.browser})
-
-export default withRedux( makeStore, mapStateToProps )(Users)
+export default connect()(Index)

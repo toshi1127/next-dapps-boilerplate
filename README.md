@@ -29,7 +29,7 @@ Run `migrate`
 
 Run `cd client`
 
-Run `npm install`
+Run `yarn`
 
 Run `yarn run dev`
 
