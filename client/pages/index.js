@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { startClock, serverRenderClock } from '../store'
+import Web3Container from '../lib/Web3Container'
 import Examples from '../components/examples'
 
 class Index extends React.Component {
@@ -21,7 +22,10 @@ class Index extends React.Component {
   }
 
   render () {
-    return <Examples />
+    return <Web3Container
+    renderLoading={() => <div>Loading Accounts Page...</div>}
+    render={({ accounts }) => <Examples accounts={accounts} />}
+    />
   }
 }
 
